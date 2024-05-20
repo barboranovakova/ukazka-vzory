@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ListItem } from '../ListItem';
 
-export const List = () => {
+export const List = ({ selected }) => {
   const [items, setItems] = useState(null);
+
+  const [selectedItems, setSelectedItems] = useState(0);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -14,6 +16,21 @@ export const List = () => {
     fetchItems();
   }, []);
 
+  const addItem = (isSelected) => {
+    // jak to napsat lépe
+    const toAdd = isSelected ? 1 : -1;
+    setSelectedItems(selectedItems + toAdd);
+    selected(selectedItems + toAdd);
+
+    // if (isSelected) {
+    //   setSelectedItems(selectedItems + 1);
+    //   selected(selectedItems + 1);
+    // } else {
+    //   setSelectedItems(selectedItems - 1);
+    //   selected(selectedItems - 1);
+    // }
+  };
+
   if (items === null) {
     return <p>Loading...</p>;
   }
@@ -21,7 +38,7 @@ export const List = () => {
   return (
     <div className="list">
       {items.map((item) => (
-        <ListItem key={item.id} item={item} />
+        <ListItem key={item.id} item={item} onSelect={addItem} />
       ))}
     </div>
   );
